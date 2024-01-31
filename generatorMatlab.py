@@ -294,6 +294,28 @@ def generate_function_expression(ast):
             code+="="'''
     return code, answer
 
+def generate(data, lexerOut, ParserOut, GenOut):
+    tokens = lexer(data)
+    if lexerOut:
+        for token in tokens:
+            print(token)
+        print()
+    ast = parser(tokens)
+    if ParserOut:
+        for node in ast:
+            print(node)
+        print()
+    generated_code = '''
+    static void main()
+    \t{
+    '''
+    generated_code+=generate_code(ast)
+    generated_code+="\t}"
+
+    if GenOut:
+        print(generated_code)    
+
+
 # Пример использования генератора кода
 data = '''
 x = 5 + 3;
@@ -329,13 +351,21 @@ disp(y);
 v = myfun(x);
 '''
 
+'''
 tokens = lexer(data)
+for token in tokens:
+    print(token)
+print()
 ast = parser(tokens)
+for node in ast:
+   print(node)
+print()
 generated_code = '''
-static void main()
-\t{
+#static void main()
+#\t{
 '''
 generated_code+=generate_code(ast)
 generated_code+="\t}"
 
 print(generated_code)
+'''
